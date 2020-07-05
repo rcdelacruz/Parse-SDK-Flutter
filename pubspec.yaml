@@ -18,6 +18,7 @@ dependencies:
   #Database
   sembast: ^2.3.0
   xxtea: ^2.0.2
+  localstorage: ^3.0.2+5
   shared_preferences: ^0.5.6
 
   # Utils

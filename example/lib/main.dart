@@ -14,7 +14,7 @@ import 'package:flutter_plugin_example/pages/decision_page.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 
 void main() {
-  _setTargetPlatformForDesktop();
+  //_setTargetPlatformForDesktop();
 
   runApp(MyApp());
 }
@@ -67,13 +67,17 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> initData() async {
     // Initialize repository
-    await initRepository();
+    //await initRepository();
     await initCoreStore();
 
     // Initialize parse
     await Parse().initialize(keyParseApplicationId, keyParseServerUrl,
-        masterKey: keyParseMasterKey,
-        debug: true,
+        masterKey: keyParseMasterKey, // Required for Back4App and others
+        //clientKey: keyParseClientKey, // Required for some setups
+        debug: true, // When enabled, prints logs to console
+        //liveQueryUrl: keyLiveQueryUrl, // Required if using LiveQuery
+        autoSendSessionId: true, // Required for authentication and ACL
+        //securityContext: securityContext, // Again, required for some setups
         coreStore: await CoreStoreSharedPrefsImp.getInstance());
 
     //parse serve with secure store and desktop support
@@ -109,7 +113,7 @@ class _MyAppState extends State<MyApp> {
     //await getSingleItem();
     //await getConfigs();
     //await query();
-    //await initUser();
+    await initUser();
     //await initInstallation();
     //await function();
     //await functionWithParameters();
@@ -226,18 +230,20 @@ class _MyAppState extends State<MyApp> {
     // All return type ParseUser except all
     ParseUser user =
         ParseUser('RE9fU360lishjFKC5dLZS4Zwm', 'password', 'test@facebook.com');
+    print(user);
 
     /// Sign-up
-    /*ParseResponse response = await user.signUp();
+    ParseResponse response = await user.signUp();
+
     if (response.success) {
       user = response.result;
-    }*/
+    }
+    print(user);
 
     final ParseUser user1 = await ParseUser.currentUser();
     user1.authData;
 
     /// Login
-    ParseResponse response = await user.login();
     if (response.success) {
       user = response.result;
     }
@@ -371,10 +377,10 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> repositoryGetAllItems() async {
-    final ApiResponse response = await dietPlanRepo.getAll();
-    if (response.success) {
-      print(response.result);
-    }
+    // final ApiResponse response = await dietPlanRepo.getAll();
+    // if (response.success) {
+    //   print(response.result);
+    // }
   }
 
   Future<void> initRepository() async {
